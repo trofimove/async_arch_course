@@ -1,4 +1,6 @@
 class Account < ApplicationRecord
+  extend Enumerize
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -14,12 +16,7 @@ class Account < ApplicationRecord
            foreign_key: :resource_owner_id,
            dependent: :delete_all # or :destroy if you need callbacks
 
-  enum role: {
-    admin: 'admin',
-    accounting_clerk: 'accounting_clerk',
-    repairman: 'repairman',
-    employee: 'employee'
-  }
+  enumerize :role, in: [:admin, :manager, :employee], predicates: true
 
   after_create do
     account = self
