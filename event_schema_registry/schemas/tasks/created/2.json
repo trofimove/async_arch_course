@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Tasks.Created.v2",
+  "description": "json schema for task creation v2",
+  "definitions": {
+    "event_data": {
+      "type": "object",
+      "properties": {
+        "public_id": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "created",
+            "done"
+          ]
+        },
+        "assignee_id": {
+          "type": "string"
+        },
+        "created_by_id": {
+          "type": "string"
+        },
+        "jira_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "public_id",
+        "status",
+        "assignee_id",
+        "created_by_id",
+        "jira_id"
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "version": {
+      "enum": [
+        2
+      ]
+    },
+    "event_name": {
+      "enum": [
+        "TaskCreated"
+      ]
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "producer": {
+      "type": "string"
+    },
+    "data": {
+      "$ref": "#/definitions/event_data"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "event_name",
+    "created_at",
+    "producer",
+    "data"
+  ]
+}

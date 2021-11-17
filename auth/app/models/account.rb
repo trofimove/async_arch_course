@@ -19,11 +19,15 @@ class Account < ApplicationRecord
   enumerize :role, in: [:admin, :manager, :employee], predicates: true
 
   after_create do
-    account = self
+    account = self.reload
 
     # ----------------------------- produce event -----------------------
     event = {
       event_name: 'AccountCreated',
+      id: SecureRandom.uuid,
+      version: 1,
+      created_at: Time.now.to_s,
+      producer: 'auth',
       data: {
         public_id: account.public_id,
         email: account.email,
@@ -33,7 +37,14 @@ class Account < ApplicationRecord
       }
     }
 
-    WaterDrop::SyncProducer.call(event.to_json, topic: 'accounts-stream')
+    result = SchemaRegistry.validate_event(event, 'accounts.created', version: 1)
+
+    if result.success?
+      WaterDrop::SyncProducer.call(event.to_json, topic: 'accounts-stream')
+    else
+      raise result.failure
+    end
+
     # --------------------------------------------------------------------
   end
 end

@@ -6,6 +6,7 @@
   <thead>
     <tr>
       <th>Name</th>
+      <th>Jira id</th>
       <th>Created by</th>
       <th>Assignee</th>
       <th>Status</th>
@@ -19,6 +20,7 @@
     <% @tasks.each do |task| %>
       <tr>
         <td><%= task.name %></td>
+        <td><%= task.jira_id %></td>
         <td><%= task.created_by_id %></td>
         <td><%= task.assignee_id %></td>
         <td><%= task.status %></td>

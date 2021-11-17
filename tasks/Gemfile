@@ -32,6 +32,10 @@ gem "omniauth-rails_csrf_protection"
 gem "slim"
 gem 'enumerize'
 
+gem 'waterdrop'
+
+gem "schema_registry", git: "https://github.com/davydovanton/event_schema_registry.git"
+
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 

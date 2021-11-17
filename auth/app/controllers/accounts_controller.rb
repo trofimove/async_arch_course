@@ -31,6 +31,10 @@ class AccountsController < ApplicationController
         # Events::AccountUpdated.new(payload).to_h.to_json
         event = {
           event_name: 'AccountUpdated',
+          id: SecureRandom.uuid,
+          version: '1',
+          created_at: Time.now.to_s,
+          producer: 'auth',
           data: {
             public_id: @account.public_id,
             email: @account.email,
@@ -39,15 +43,31 @@ class AccountsController < ApplicationController
           }
         }
 
-        WaterDrop::SyncProducer.call(event.to_json, topic: 'accounts-stream')
+        result = SchemaRegistry.validate_event(event, 'accounts.updated', version: 1)
+        if result.success?
+          WaterDrop::SyncProducer.call(event.to_json, topic: 'accounts-stream')
+        else
+          raise result.failure
+        end
+
         # --------------------------------------------------------------------
 
         if new_role
           event = {
             event_name: 'AccountRoleChanged',
+            id: SecureRandom.uuid,
+            version: '1',
+            created_at: Time.now.to_s,
+            producer: 'auth',
             data: { public_id: @account.public_id, role: new_role }
           }
-          WaterDrop::SyncProducer.call(event.to_json, topic: 'accounts')
+
+          result = SchemaRegistry.validate_event(event, 'accounts.roleChanged', version: 1)
+          if result.success?
+            WaterDrop::SyncProducer.call(event.to_json, topic: 'accounts')
+          else
+            raise result.failure
+          end
         end
 
         # --------------------------------------------------------------------
@@ -71,10 +91,19 @@ class AccountsController < ApplicationController
     # ----------------------------- produce event -----------------------
     event = {
       event_name: 'AccountDeleted',
+      id: SecureRandom.uuid,
+      version: '1',
+      created_at: Time.now.to_s,
+      producer: 'auth',
       data: { public_id: @account.public_id }
     }
 
-    WaterDrop::SyncProducer.call(event.to_json, topic: 'accounts-stream')
+    result = SchemaRegistry.validate_event(event, 'accounts.deleted', version: 1)
+    if result.success?
+      WaterDrop::SyncProducer.call(event.to_json, topic: 'accounts-stream')
+    else
+      raise result.failure
+    end
     # --------------------------------------------------------------------
 
     respond_to do |format|

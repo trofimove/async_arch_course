@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_11_192901) do
+ActiveRecord::Schema.define(version: 2021_11_16_161234) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "accounts", force: :cascade do |t|
     t.string "full_name"
-    t.string "public_id", null: false
+    t.uuid "public_id", null: false
     t.string "email", null: false
     t.string "role", null: false
     t.string "active", default: "t"
@@ -32,8 +32,10 @@ ActiveRecord::Schema.define(version: 2021_11_11_192901) do
     t.string "status"
     t.string "assign_amount"
     t.string "complete_amount"
+    t.uuid "public_id", default: -> { "gen_random_uuid()" }, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "jira_id"
   end
 
 end
