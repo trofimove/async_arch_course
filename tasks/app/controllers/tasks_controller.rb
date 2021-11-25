@@ -43,7 +43,6 @@ class TasksController < ApplicationController
             public_id: @task.public_id,
             assignee_id: @task.assignee.public_id,
             created_by_id: current_account.public_id,
-            status: @task.status,
             jira_id: @task.jira_id
           }
         }

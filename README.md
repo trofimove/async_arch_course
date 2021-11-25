@@ -1,24 +1,7 @@
-# README
+# async_arch_course
+Link: https://education.borshev.com/architecture
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## 0 week task
+![Alt text](/draft%20architecture.png "System architecture v0")
+[0_architecture](0_task/draft_architecture.png)
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
